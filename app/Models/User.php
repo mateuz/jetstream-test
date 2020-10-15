@@ -57,4 +57,14 @@ class User extends Authenticatable
     protected $appends = [
         'profile_photo_url',
     ];
+
+    public function snps()
+    {
+        return $this->hasMany('App\Models\SnpsUser');
+    }
+
+    public function classes()
+    {
+        return $this->hasMany('App\Models\ClassesUser');
+    }
 }

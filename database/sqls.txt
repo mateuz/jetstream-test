@@ -1,0 +1,88 @@
+CREATE TABLE `jetstream`.`snps` (
+  `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `snp` VARCHAR(45) NOT NULL,
+  `gene` VARCHAR(45) NOT NULL,
+  `created_at` TIMESTAMP NULL,
+  `deleted_at` TIMESTAMP NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE INDEX `id_UNIQUE` (`id` ASC),
+  UNIQUE INDEX `snp_UNIQUE` (`snp` ASC));
+
+CREATE TABLE `jetstream`.`snps_user` (
+  `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `snp_id` BIGINT NOT NULL,
+  `user_id` BIGINT NOT NULL,
+  `genotype` VARCHAR(45) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE INDEX `id_UNIQUE` (`id` ASC));
+
+ALTER TABLE `jetstream`.`snps_user`
+CHANGE COLUMN `snp_id` `snp_id` BIGINT(20) UNSIGNED NOT NULL ,
+CHANGE COLUMN `user_id` `user_id` BIGINT(20) UNSIGNED NOT NULL ,
+ADD INDEX `snps_user_snp_id_fk_idx` (`snp_id` ASC),
+ADD INDEX `snps_user_user_id_fk_idx` (`user_id` ASC);
+;
+ALTER TABLE `jetstream`.`snps_user`
+ADD CONSTRAINT `snps_user_snp_id_fk`
+  FOREIGN KEY (`snp_id`)
+  REFERENCES `jetstream`.`snps` (`id`)
+  ON DELETE CASCADE
+  ON UPDATE NO ACTION,
+ADD CONSTRAINT `snps_user_user_id_fk`
+  FOREIGN KEY (`user_id`)
+  REFERENCES `jetstream`.`users` (`id`)
+  ON DELETE CASCADE
+  ON UPDATE NO ACTION;
+
+CREATE TABLE `jetstream`.`classes` (
+  `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `name` VARCHAR(45) NOT NULL,
+  `description` VARCHAR(255) NULL,
+  `nvar` INT NULL,
+  `created_at` TIMESTAMP NULL,
+  `deleted_at` TIMESTAMP NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE INDEX `id_UNIQUE` (`id` ASC));
+
+CREATE TABLE `jetstream`.`classes_snps` (
+  `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `class_id` BIGINT UNSIGNED NOT NULL,
+  `snp_id` BIGINT UNSIGNED NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE INDEX `id_UNIQUE` (`id` ASC));
+
+ALTER TABLE `jetstream`.`classes_snps`
+ADD INDEX `classes_snps_class_id_idx` (`class_id` ASC),
+ADD INDEX `classes_snps_snp_id_idx` (`snp_id` ASC);
+;
+ALTER TABLE `jetstream`.`classes_snps`
+ADD CONSTRAINT `classes_snps_class_id`
+  FOREIGN KEY (`class_id`)
+  REFERENCES `jetstream`.`classes` (`id`)
+  ON DELETE CASCADE
+  ON UPDATE NO ACTION,
+ADD CONSTRAINT `classes_snps_snp_id`
+  FOREIGN KEY (`snp_id`)
+  REFERENCES `jetstream`.`snps` (`id`)
+  ON DELETE CASCADE
+  ON UPDATE NO ACTION;
+
+CREATE TABLE `jetstream`.`classes_user` (
+  `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `class_id` BIGINT UNSIGNED NOT NULL,
+  `user_id` BIGINT UNSIGNED NOT NULL,
+  `values` TEXT NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE INDEX `id_UNIQUE` (`id` ASC),
+  INDEX `classes_user_class_id_fk_idx` (`class_id` ASC),
+  INDEX `classes_user_user_id_fk_idx` (`user_id` ASC),
+  CONSTRAINT `classes_user_class_id_fk`
+    FOREIGN KEY (`class_id`)
+    REFERENCES `jetstream`.`classes` (`id`)
+    ON DELETE CASCADE
+    ON UPDATE NO ACTION,
+  CONSTRAINT `classes_user_user_id_fk`
+    FOREIGN KEY (`user_id`)
+    REFERENCES `jetstream`.`users` (`id`)
+    ON DELETE CASCADE
+    ON UPDATE NO ACTION);

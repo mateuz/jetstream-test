@@ -17,6 +17,7 @@
 
         <!-- Scripts -->
         <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.6.0/dist/alpine.js" defer></script>
+        <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
     </head>
     <body class="font-sans antialiased">
         <div class="min-h-screen bg-gray-100">
@@ -36,6 +37,9 @@
                             <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
                                 <x-jet-nav-link href="/dashboard" :active="request()->routeIs('dashboard')">
                                     {{ __('Dashboard') }}
+                                </x-jet-nav-link>
+                                <x-jet-nav-link href="/eye-color-analysis" :active="request()->routeIs('eye')">
+                                    {{ __('Predição Ocular') }}
                                 </x-jet-nav-link>
                             </div>
                         </div>
