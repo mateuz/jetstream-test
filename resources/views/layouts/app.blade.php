@@ -134,6 +134,9 @@
                         <x-jet-responsive-nav-link href="/dashboard" :active="request()->routeIs('dashboard')">
                             {{ __('Dashboard') }}
                         </x-jet-responsive-nav-link>
+                        <x-jet-responsive-nav-link href="/eye-color-analysis" :active="request()->routeIs('eye')">
+                            {{ __('Predição Ocular') }}
+                        </x-jet-responsive-nav-link>
                     </div>
 
                     <!-- Responsive Settings Options -->
